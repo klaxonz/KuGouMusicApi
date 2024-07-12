@@ -13,8 +13,10 @@ module.exports = (params, useAxios) => {
       cookie: params?.cookie || {},
     }).then(resp => {
       if (resp.body?.data?.status == 4) {
-        resp.cookie.push(`token=${resp.body?.data?.token}`);
-        resp.cookie.push(`userid=${resp.body?.data?.userid}`);
+        var date = new Date();
+        date.setTime(date.getTime() + (1*24*60*60*1000)); // 1 day in milliseconds
+        resp.cookie.push("token=" + resp.body?.data?.token + "; expires=" + date.toUTCString());
+        resp.cookie.push("userid=" + resp.body?.data?.userid + "; expires=" + date.toUTCString());
       }
       resolve(resp);
     }).catch(e => reject(e));

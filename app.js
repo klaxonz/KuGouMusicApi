@@ -2,7 +2,7 @@
 // import { startService } from './server';
 async function start() {
   // await startService();
-  require('./server').startService();
+  require('./server').startService({});
 }
 
 start();

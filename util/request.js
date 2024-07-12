@@ -1,4 +1,4 @@
-const axios = require('axios');
+const { default: axios } = require('axios')
 const { cryptoMd5 } = require('./crypto');
 const { signKey, signatureAndroidParams, signatureRegisterParams, signatureWebParams } = require('./helper');
 const { parseCookieString } = require('./util');
@@ -11,7 +11,7 @@ const { appid, clientver, liteAppid, liteClientver } = require('./config.json');
  */
 const createRequest = (options) => {
   return new Promise(async (resolve, reject) => {
-    const isLite = process.env.platform === 'lite';
+    const isLite = process.env.VUE_APP_KG_PLATFORM === 'lite';
     const dfid = options?.cookie?.dfid || '-'; // 自定义
     const mid = cryptoMd5(dfid); // 可以自定义
     const uuid = cryptoMd5(`${dfid}${mid}`); // 可以自定义

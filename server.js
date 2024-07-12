@@ -1,5 +1,5 @@
-const fs = require('node:fs');
-const path = require('node:path');
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const decode = require('safe-decode-uri-component');
 const { cookieToJson } = require('./util/util');
@@ -81,9 +81,9 @@ async function consturctServer(moduleDefs) {
     const cookies = (req.headers.cookie || '').split(/;\s+|(?<!\s)\s+$/g);
     if (!cookies.includes('KUGOU_API_PLATFORM')) {
       if (req.protocol === 'https') {
-        res.append('Set-Cookie', `KUGOU_API_PLATFORM=${process.env.platform}; PATH=/; SameSite=None; Secure`);
+        res.append('Set-Cookie', `KUGOU_API_PLATFORM=${process.env.VUE_APP_KG_PLATFORM}; PATH=/; SameSite=None; Secure`);
       } else {
-        res.append('Set-Cookie', `KUGOU_API_PLATFORM=${process.env.platform}; PATH=/`);
+        res.append('Set-Cookie', `KUGOU_API_PLATFORM=${process.env.VUE_APP_KG_PLATFORM}; PATH=/`);
       }
     }
 
@@ -179,12 +179,12 @@ async function consturctServer(moduleDefs) {
   return app;
 }
 
-async function startService() {
-  const port = Number(process.env.PORT || '3000');
-  const host = process.env.HOST || '';
+async function startService(options) {
 
-  const app = await consturctServer();
+  const port = Number(options?.port || process.env.PORT || '3000')
+  const host = options?.host || process.env.HOST || ''
 
+  const app = await consturctServer(options.moduleDefs);
   const appExt = app;
 
   appExt.service = app.listen(port, host, () => {
